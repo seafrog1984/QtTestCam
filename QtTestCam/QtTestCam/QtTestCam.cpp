@@ -223,84 +223,128 @@ bool QtTestCam::eventFilter(QObject *obj, QEvent *event)
 	//{
 	//	magicTime();
 	//}
+	Mat imgt;
+	g_Img[0].copyTo(imgt);
 
-	if (qobject_cast<QLabel*>(obj) == ui.label&&event->type() == QEvent::MouseButtonPress)
+	char label[1000];
+	char label2[1000];
+
+
+	if (qobject_cast<QLabel*>(obj) == ui.label&&event->type()==QEvent::MouseButtonPress)
 	{
-		QMouseEvent* mevent = (QMouseEvent*)event;
 
+		QMouseEvent * mevent = (QMouseEvent *)event;
 		if (mevent->button() == Qt::LeftButton)
 		{
-			//	QMessageBox::information(NULL, "Filter", "left click"); 
-			//setMouseState(MouseState::L_C, 0);
+			int x = mevent->pos().x();
+			int y = mevent->pos().y();
 
-				int w=ui.label->pixmap()->width();
-				int h = ui.label->pixmap()->height();
+			if (x < 0) x = 0;
+			if (x >= imgt.cols) x = imgt.cols - 1;
+			if (y < 0) y = 0;
+			if (y >= imgt.rows) y = imgt.rows - 1;
 
-				m_ratio +=0.1;
-				if (m_ratio > 3) m_ratio = 3;
+			int tmp = imgt.at<uchar>(x, y);
+			float temper = g_temper[0].at<float>(x, y);
+			sprintf(label, "Temperature:%.2f)", temper);
+			sprintf(label2, "Pixel:(%d, %d)", x, y);	//获取坐标点位置
+			rectangle(imgt, cvPoint(x, y - 12), cvPoint(x + 180, y + 20),
+				CV_RGB(0, 0, 0), CV_FILLED, 8, 0);
+			putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 0.2, Scalar(255, 23, 0), 1, 8);
+			putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 0.3, Scalar(255, 23, 0), 1, 8);
 
-				Mat timg;
-
-				cv::resize(g_Img[0], timg, Size(w * m_ratio, h * m_ratio), 0, 0);
-
-				int m_mx = w * m_ratio / 2 - w/2;
-				int m_my = h * m_ratio / 2 - h/2;
-				Rect rect1(m_mx, m_my, w, h);
-				//	Rect rect2(224, 224, 128, 128);
-
-				Mat roi1;
-				timg(rect1).copyTo(roi1); // copy the region rect1 from the image to roi1
-
-				QImage image = QImage((const unsigned char*)(roi1.data), roi1.cols, roi1.rows, QImage::Format_RGB888);
-				//QImage image = QImage((const unsigned char*)(img.data), img.cols, img.rows, QImage::Format_Grayscale8);
-
-				ui.label->setPixmap(QPixmap::fromImage(image));
-
-	
-				timg.release();
-				roi1.release();
-
-		}
-		// 如果是鼠标右键按下
-		else if (mevent->button() == Qt::RightButton)
-		{
-			//QMessageBox::information(NULL, "Filter", "r click");
-			//setMouseState(MouseState::R_C, 0);
+			//		cvCvtColor(img1, img1, CV_BGR2RGB);
 
 
-			int w = ui.label->pixmap()->width();
-			int h = ui.label->pixmap()->height();
-
-			m_ratio -= 0.1;
-			if (m_ratio < 1) m_ratio = 1;
-			Mat timg;
-
-			cv::resize(g_Img[0], timg, Size(w * m_ratio, h * m_ratio), 0, 0);
-
-			int m_mx = w * m_ratio / 2 - w / 2;
-			int m_my = h * m_ratio / 2 - h / 2;
-			Rect rect1(m_mx, m_my, w, h);
-			//	Rect rect2(224, 224, 128, 128);
-
-			Mat roi1;
-			timg(rect1).copyTo(roi1); // copy the region rect1 from the image to roi1
-
-			QImage image = QImage((const unsigned char*)(roi1.data), roi1.cols, roi1.rows, QImage::Format_RGB888);
-			//QImage image = QImage((const unsigned char*)(img.data), img.cols, img.rows, QImage::Format_Grayscale8);
-
+			QImage image = QImage((const unsigned char*)(imgt.data), imgt.cols, imgt.rows, QImage::Format_RGB888);
 			ui.label->setPixmap(QPixmap::fromImage(image));
 
-
-			timg.release();
-			roi1.release();
 		}
-		
+
 		return true;
 	}
-	else 
+	else
 	{
 		return false;
 	}
+
+	//if (qobject_cast<QLabel*>(obj) == ui.label&&event->type() == QEvent::MouseButtonPress)
+	//{
+	//	QMouseEvent* mevent = (QMouseEvent*)event;
+
+	//	if (mevent->button() == Qt::LeftButton)
+	//	{
+	//		//	QMessageBox::information(NULL, "Filter", "left click"); 
+	//		//setMouseState(MouseState::L_C, 0);
+
+	//			int w=ui.label->pixmap()->width();
+	//			int h = ui.label->pixmap()->height();
+
+	//			m_ratio +=0.1;
+	//			if (m_ratio > 3) m_ratio = 3;
+
+	//			Mat timg;
+
+	//			cv::resize(g_Img[0], timg, Size(w * m_ratio, h * m_ratio), 0, 0);
+
+	//			int m_mx = w * m_ratio / 2 - w/2;
+	//			int m_my = h * m_ratio / 2 - h/2;
+	//			Rect rect1(m_mx, m_my, w, h);
+	//			//	Rect rect2(224, 224, 128, 128);
+
+	//			Mat roi1;
+	//			timg(rect1).copyTo(roi1); // copy the region rect1 from the image to roi1
+
+	//			QImage image = QImage((const unsigned char*)(roi1.data), roi1.cols, roi1.rows, QImage::Format_RGB888);
+	//			//QImage image = QImage((const unsigned char*)(img.data), img.cols, img.rows, QImage::Format_Grayscale8);
+
+	//			ui.label->setPixmap(QPixmap::fromImage(image));
+
+	//
+	//			timg.release();
+	//			roi1.release();
+
+	//	}
+	//	// 如果是鼠标右键按下
+	//	else if (mevent->button() == Qt::RightButton)
+	//	{
+	//		//QMessageBox::information(NULL, "Filter", "r click");
+	//		//setMouseState(MouseState::R_C, 0);
+
+
+	//		int w = ui.label->pixmap()->width();
+	//		int h = ui.label->pixmap()->height();
+
+	//		m_ratio -= 0.1;
+	//		if (m_ratio < 1) m_ratio = 1;
+	//		Mat timg;
+
+	//		cv::resize(g_Img[0], timg, Size(w * m_ratio, h * m_ratio), 0, 0);
+
+	//		int m_mx = w * m_ratio / 2 - w / 2;
+	//		int m_my = h * m_ratio / 2 - h / 2;
+	//		Rect rect1(m_mx, m_my, w, h);
+	//		//	Rect rect2(224, 224, 128, 128);
+
+	//		Mat roi1;
+	//		timg(rect1).copyTo(roi1); // copy the region rect1 from the image to roi1
+
+	//		QImage image = QImage((const unsigned char*)(roi1.data), roi1.cols, roi1.rows, QImage::Format_RGB888);
+	//		//QImage image = QImage((const unsigned char*)(img.data), img.cols, img.rows, QImage::Format_Grayscale8);
+
+	//		ui.label->setPixmap(QPixmap::fromImage(image));
+
+
+	//		timg.release();
+	//		roi1.release();
+	//	}
+	//	
+	//	return true;
+	//}
+	//else 
+	//{
+	//	return false;
+	//}
 }
 
 
@@ -418,6 +462,7 @@ void QtTestCam::CloseCameraClicked()
 	data2Img(g_pData[g_picNum], img, IMAGE_HEIGHT, IMAGE_WIDTH,16, 2, 2,g_referTemper);
 
 	img.copyTo(g_Img[g_picNum]);
+	imshow("r", g_Img[g_picNum]);
 	
 	g_temper[g_picNum].create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_32FC1);
 
@@ -454,7 +499,7 @@ void QtTestCam::CloseCameraClicked()
 	}
 
 
-	imshow("view", g_dstImage3);
+//	imshow("view", g_dstImage3);
 
 
 	//float tm = g_temper[0].at<float>(0, 0);
@@ -544,9 +589,37 @@ void QtTestCam::changeLabel(int totalNum, int imagePerRow)//调整显示窗口数
 }
 void QtTestCam::btn_testClicked()
 {
+
+	Mat imgt;
+	g_Img[0].copyTo(imgt);
+
+
+	char label[1000];
+	char label2[1000];
+
+	CvFont font, font2;
+		
+		int x = 50;
+		int y =70;
+
+		if (x < 0) x = 0;
+		if (x >= imgt.cols) x = imgt.cols - 1;
+		if (y < 0) y = 0;
+		if (y >= imgt.rows) y = imgt.rows - 1;
+
+		int tmp = imgt.at<uchar>(x, y);
+		float temper = g_temper[0].at<float>(x, y);
+		sprintf(label, "Temperature:%.2f)", temper);
+		sprintf(label2, "Pixel:(%d, %d)", x, y);	//获取坐标点位置
+		rectangle(imgt, cvPoint(x, y - 12), cvPoint(x + 180, y + 20),
+			CV_RGB(0, 0, 0), CV_FILLED, 8, 0);
+		putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
+		putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
+	
+	
+		QImage image = QImage((const unsigned char*)(imgt.data), imgt.cols, imgt.rows, QImage::Format_RGB888);
+		ui.label->setPixmap(QPixmap::fromImage(image));
 	//changeLabel(10, 5);
-
-
 	//g_referTemper = g_referTemper + 1;
 
 	//Mat img;
@@ -564,9 +637,9 @@ void QtTestCam::btn_testClicked()
 	//QImage newImg = image.scaled(p->width(), p->height());
 
 	//p->setPixmap(QPixmap::fromImage(newImg));
-	dlg = new QtSetDlg;
+	//dlg = new QtSetDlg;
 
-	dlg->show();
+	//dlg->show();
 	
 
 }
