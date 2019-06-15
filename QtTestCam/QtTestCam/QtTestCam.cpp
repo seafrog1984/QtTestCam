@@ -86,19 +86,19 @@ void draw_shape(Mat& img, Shape allshape[], int shape_no)
 			sprintf_s(temp, ("%s"), allshape[i].comment);
 			////显示文字
 			////读取TTF字体文件
-			CvxText text("C:\\Windows\\Fonts\\simhei.ttf"); // "zenhei.ttf"为黑体常规
-			//CvxText text(""); // "zenhei.ttf"为黑体常规
-			//	const char *msg = "在OpenCV中输出汉字！";
-			float p = 1;
-			//CvScalar fsize;
-			//////设置字体属性 字体大小/空白比例/间隔比例/旋转角度
-			//fsize = cvScalar(20, 0.5, 0.1, 0);
-			text.setMySize(10, 10);
-			text.setFont(NULL, NULL, NULL, &p);
-			//	rectangle(imgt, pre_pt, cur_pt, Scalar(255, 255, 255), 1, 8, 0);//在临时图像上实时显示鼠标拖动时形成的矩形
-			//	putText(imgt, msg, Point(cur_pt.x,cur_pt.y+15), FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255, 255, 255));
+			//CvxText text("C:\\Windows\\Fonts\\simhei.ttf"); // "zenhei.ttf"为黑体常规
+			////CvxText text(""); // "zenhei.ttf"为黑体常规
+			////	const char *msg = "在OpenCV中输出汉字！";
+			//float p = 1;
+			////CvScalar fsize;
+			////////设置字体属性 字体大小/空白比例/间隔比例/旋转角度
+			////fsize = cvScalar(20, 0.5, 0.1, 0);
+			//text.setMySize(10, 10);
+			//text.setFont(NULL, NULL, NULL, &p);
+			////	rectangle(imgt, pre_pt, cur_pt, Scalar(255, 255, 255), 1, 8, 0);//在临时图像上实时显示鼠标拖动时形成的矩形
+			////	putText(imgt, msg, Point(cur_pt.x,cur_pt.y+15), FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255, 255, 255));
 
-			text.putText(img1, temp, Point(allshape[i].rb_x, allshape[i].rb_y + 15), CV_RGB(0, 0, 0));
+			//text.putText(img1, temp, Point(allshape[i].rb_x, allshape[i].rb_y + 15), CV_RGB(0, 0, 0));
 		}
 	}
 	Mat imgt;
@@ -244,16 +244,36 @@ bool QtTestCam::eventFilter(QObject *obj, QEvent *event)
 			if (y < 0) y = 0;
 			if (y >= imgt.rows) y = imgt.rows - 1;
 
-			int tmp = imgt.at<uchar>(x, y);
-			float temper = g_temper[0].at<float>(x, y);
-			sprintf(label, "Temperature:%.2f)", temper);
-			sprintf(label2, "Pixel:(%d, %d)", x, y);	//获取坐标点位置
+	//		int tmp = imgt.at<uchar>(x, y);
+			float temper = g_temper[0].at<float>(y, x);
+			sprintf(label, "温度:%.2f)", temper);
+			sprintf(label2, "坐标:(%d, %d)", x, y);	//获取坐标点位置
 			rectangle(imgt, cvPoint(x, y - 12), cvPoint(x + 180, y + 20),
 				CV_RGB(0, 0, 0), CV_FILLED, 8, 0);
-			putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 0.2, Scalar(255, 23, 0), 1, 8);
-			putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 0.3, Scalar(255, 23, 0), 1, 8);
+		/*	putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 0.2, Scalar(255, 23, 0), 1, 8);
+			putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 0.3, Scalar(255, 23, 0), 1, 8);*/
 
-			//		cvCvtColor(img1, img1, CV_BGR2RGB);
+			CvxText text("C:\\Windows\\Fonts\\simhei.ttf"); //指定字体
+			cv::Scalar size{ 12, 0, 0.1, 0 }; // (字体大小, 无效的, 字符间距, 无效的 }
+			text.setFont(nullptr, &size, nullptr, 0);
+			text.putText(imgt, label, Point(x, y), Scalar(255, 23, 0));
+			text.putText(imgt, label2, Point(x, y + 20), Scalar(255, 23, 0));
+
+			//CvxText text("C:\\Windows\\Fonts\\simhei.ttf"); //指定字体
+			//cv::Scalar size1{ 100, 0.5, 0.1, 0 }, size2{ 100, 0, 0.1, 0 }, size3{ 50, 0, 1, 0 }, size4{ 50, 0, 0.1, 0 }; // (字体大小, 无效的, 字符间距, 无效的 }
+
+			//text.setFont(nullptr, &size1, nullptr, 0);
+			//text.putText(imgt, "中国", cv::Point(50, 100));
+
+			//text.setFont(nullptr, &size2, nullptr, 0);
+			//text.putText(imgt, "北京", cv::Point(50, 200), cv::Scalar(255, 0, 0));
+
+			//text.setFont(nullptr, &size3, nullptr, 0);
+			//text.putText(imgt, "China", cv::Point(50, 250), cv::Scalar(0, 255, 0));
+
+			//text.setFont(nullptr, &size4, nullptr, 0);
+			//text.putText(imgt, "BeiJing", cv::Point(50, 300), cv::Scalar(0, 0, 255));
+
 
 
 			QImage image = QImage((const unsigned char*)(imgt.data), imgt.cols, imgt.rows, QImage::Format_RGB888);
@@ -464,10 +484,49 @@ void QtTestCam::CloseCameraClicked()
 	img.copyTo(g_Img[g_picNum]);
 	imshow("r", g_Img[g_picNum]);
 	
-	g_temper[g_picNum].create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_32FC1);
+	g_temper[g_picNum].create(IMAGE_WIDTH ,IMAGE_HEIGHT, CV_32FC1);
 
 	data2Temper(g_pData[g_picNum], g_temper[g_picNum], IMAGE_HEIGHT, IMAGE_WIDTH,100);
+	
 
+	Mat tshow(IMAGE_WIDTH, IMAGE_HEIGHT, CV_8UC1);
+	int	bottomvalue = 99999;
+	int	topvalue = -99999;
+	
+	for (int i = 0; i < g_temper[g_picNum].rows; i++)
+	{
+		float *p_tData = g_temper[g_picNum].ptr<float>(i);
+		for (int j = 0; j < g_temper[g_picNum].cols; j++)
+		{
+			float value = *(p_tData + j);
+			//dst.at<uchar>(j, HEIGHT - 1 - i) = g_tmpdst.at<uchar>(i, j);
+			bottomvalue = bottomvalue<value ? bottomvalue : value;
+			topvalue = topvalue>value ? topvalue : value;
+		}
+
+	}
+	float range = topvalue - bottomvalue;
+	int displayValue;
+
+	for (int i = 0; i < g_temper[g_picNum].rows; i++)
+	{
+		uchar *p_tTData =tshow.ptr<uchar>(i);
+		float *p_tData = g_temper[g_picNum].ptr<float>(i);
+		for (int j = 0; j < g_temper[g_picNum].cols; j++)
+		{
+			float value = *(p_tData + j);
+			//dst.at<uchar>(j, HEIGHT - 1 - i) = g_tmpdst.at<uchar>(i, j);
+			displayValue = ((value - bottomvalue) * 255) / range;
+
+			*(p_tTData + j) = displayValue;
+		}
+
+	}
+
+
+
+
+	imshow("rt", tshow);
 
 	Mat g_dstImage3;
 	img.copyTo(g_dstImage3);
