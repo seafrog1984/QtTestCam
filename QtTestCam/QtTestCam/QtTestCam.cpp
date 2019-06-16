@@ -21,6 +21,7 @@ Mat temp1;
 
 //#include "IRSDK.h"
 #include <imgProcDll.h>
+#include "MyLabel.h"
 
 using namespace cv;
 using namespace std;
@@ -175,9 +176,11 @@ QtTestCam::QtTestCam(QWidget *parent)
 	connect(ui.btn_stop, SIGNAL(clicked()), this, SLOT(CloseCameraClicked()));//关闭摄像头
 	connect(ui.btn_test, SIGNAL(clicked()), this, SLOT(btn_testClicked()));//测试断层
 
+	connect(ui.label, SIGNAL(clicked()), this, SLOT(testMouseMoved()));
+
 	ui.label->setBaseSize(QSize(100, 800));
 
-	ui.label->installEventFilter(this);
+	//ui.label->installEventFilter(this);
 
 
 	int g_picTotalNum = 12;
@@ -186,7 +189,7 @@ QtTestCam::QtTestCam(QWidget *parent)
 	{
 		for (int y = 0; y < 3; y++)
 		{
-			QLabel *lb = new QLabel;
+			MyLabel *lb = new MyLabel;
 			lb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 			//lb->setFixedSize(240, 320);
 			lb->setText(QString::number(x * 3 + y+1));
@@ -228,7 +231,10 @@ bool QtTestCam::eventFilter(QObject *obj, QEvent *event)
 
 	char label[1000];
 	char label2[1000];
-
+	if (qobject_cast<QLabel*>(obj) == ui.label&&event->type() == QEvent::MouseMove)
+	{
+		imshow("move", imgt);
+	}
 
 	if (qobject_cast<QLabel*>(obj) == ui.label&&event->type()==QEvent::MouseButtonPress)
 	{
@@ -649,35 +655,60 @@ void QtTestCam::changeLabel(int totalNum, int imagePerRow)//调整显示窗口数
 void QtTestCam::btn_testClicked()
 {
 
-	Mat imgt;
-	g_Img[0].copyTo(imgt);
+	ui.label->setShapeType(2);
 
 
-	char label[1000];
-	char label2[1000];
+	//QPainter painter(ui.label);
+	//QImage wb_Image;
+	//wb_Image.load("E:/lena_color.bmp");
+	//if (wb_Image.size().width() <= 0) return;
+	/////将图像按比例缩放成和窗口一样大小
+	//QImage img = wb_Image.scaled(QSize(ui.label->width(), ui.label->height()), Qt::IgnoreAspectRatio);
+	//int x = this->width() - img.width();
+	//int y = this->height() - img.height();
+	//painter.drawImage(QPoint(x, y), img);
 
-	CvFont font, font2;
-		
-		int x = 50;
-		int y =70;
+	//// 画矩形框
+	//QPainter paint;
+	//paint.begin(this);
 
-		if (x < 0) x = 0;
-		if (x >= imgt.cols) x = imgt.cols - 1;
-		if (y < 0) y = 0;
-		if (y >= imgt.rows) y = imgt.rows - 1;
+	//paint.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap));
+	//paint.drawRect(QRect(50, 50, 200, 200));
 
-		int tmp = imgt.at<uchar>(x, y);
-		float temper = g_temper[0].at<float>(x, y);
-		sprintf(label, "Temperature:%.2f)", temper);
-		sprintf(label2, "Pixel:(%d, %d)", x, y);	//获取坐标点位置
-		rectangle(imgt, cvPoint(x, y - 12), cvPoint(x + 180, y + 20),
-			CV_RGB(0, 0, 0), CV_FILLED, 8, 0);
-		putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
-		putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
-	
-	
-		QImage image = QImage((const unsigned char*)(imgt.data), imgt.cols, imgt.rows, QImage::Format_RGB888);
-		ui.label->setPixmap(QPixmap::fromImage(image));
+	//QString strText = QString::fromLocal8Bit("用双手成就你的梦想");;
+	//paint.drawText(250, 50, strText);
+
+	//paint.end();
+
+	//Mat imgt;
+	//g_Img[0].copyTo(imgt);
+
+
+	//char label[1000];
+	//char label2[1000];
+
+	//CvFont font, font2;
+	//	
+	//	int x = 50;
+	//	int y =70;
+
+	//	if (x < 0) x = 0;
+	//	if (x >= imgt.cols) x = imgt.cols - 1;
+	//	if (y < 0) y = 0;
+	//	if (y >= imgt.rows) y = imgt.rows - 1;
+
+	//	int tmp = imgt.at<uchar>(x, y);
+	//	float temper = g_temper[0].at<float>(x, y);
+	//	sprintf(label, "Temperature:%.2f)", temper);
+	//	sprintf(label2, "Pixel:(%d, %d)", x, y);	//获取坐标点位置
+	//	rectangle(imgt, cvPoint(x, y - 12), cvPoint(x + 180, y + 20),
+	//		CV_RGB(0, 0, 0), CV_FILLED, 8, 0);
+	//	putText(imgt, label, Point(x, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
+	//	putText(imgt, label2, Point(x, y + 20), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 23, 0), 4, 8);
+	//
+	//
+	//	QImage image = QImage((const unsigned char*)(imgt.data), imgt.cols, imgt.rows, QImage::Format_RGB888);
+	//	ui.label->setPixmap(QPixmap::fromImage(image));
 	//changeLabel(10, 5);
 	//g_referTemper = g_referTemper + 1;
 
@@ -738,6 +769,28 @@ void QtTestCam::wheelEvent(QWheelEvent*event)
 
 void QtTestCam::paintEvent(QPaintEvent *)
 {
+	QPainter painter(ui.label);
+	QImage wb_Image;
+	wb_Image.load("E:/lena_color.bmp");
+	if (wb_Image.size().width() <= 0) return;
+	///将图像按比例缩放成和窗口一样大小
+	QImage img = wb_Image.scaled(QSize(ui.label->width(), ui.label->height()), Qt::IgnoreAspectRatio);
+	int x = this->width() - img.width();
+	int y = this->height() - img.height();
+	painter.drawImage(QPoint(x, y), img);
+
+	// 画矩形框
+	QPainter paint;
+	paint.begin(this);
+
+	paint.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap));
+	paint.drawRect(QRect(50, 50, 200, 200));
+
+	QString strText = QString::fromLocal8Bit("用双手成就你的梦想");;
+	paint.drawText(250, 50, strText);
+
+	paint.end();
+
 	//QPainter painter(this);
 	//painter.drawLine(80, 100, 650, 500);
 	//painter.setPen(Qt::red);
@@ -746,18 +799,18 @@ void QtTestCam::paintEvent(QPaintEvent *)
 	//painter.setBrush(Qt::blue);
 	//painter.drawEllipse(50, 150, 400, 200);
 
-	QPainter paint(this);
-	QImage image;
-	image.load("E:/lena_color.bmp");
-//	qDebug() << image.size() << image.format() << image.depth();
-	paint.drawImage(QPoint(200, 200), image);
-	paint.setPen(QPen(Qt::blue, 5));
-	for (int i = 0; i<4; i++)
-		paint.drawPoint(X[i], Y[i]);
-	paint.setPen(Qt::red);
-	QPolygon pts;
-	pts.setPoints(4, X[0], Y[0], X[1], Y[1], X[2], Y[2], X[3], Y[3]);
-	paint.drawConvexPolygon(pts);
+//	QPainter paint(this);
+//	QImage image;
+//	image.load("E:/lena_color.bmp");
+////	qDebug() << image.size() << image.format() << image.depth();
+//	paint.drawImage(QPoint(200, 200), image);
+//	paint.setPen(QPen(Qt::blue, 5));
+//	for (int i = 0; i<4; i++)
+//		paint.drawPoint(X[i], Y[i]);
+//	paint.setPen(Qt::red);
+//	QPolygon pts;
+//	pts.setPoints(4, X[0], Y[0], X[1], Y[1], X[2], Y[2], X[3], Y[3]);
+//	paint.drawConvexPolygon(pts);
 
 }
 
@@ -781,15 +834,15 @@ void QtTestCam::mouseReleaseEvent(QMouseEvent *event)
 	m_dragging = 0;
 }
 
-void QtTestCam::mouseMoveEvent(QMouseEvent *event)
-{
-	if (m_dragging == 1)
-	{
-		X[j] = event->pos().x();
-		Y[j] = event->pos().y();
-		update();
-	}
-}
+//void QtTestCam::mouseMoveEvent(QMouseEvent *event)
+//{
+//	if (m_dragging == 1)
+//	{
+//		X[j] = event->pos().x();
+//		Y[j] = event->pos().y();
+//		update();
+//	}
+//}
 
 
 void QtTestCam::mousePressEvent(QMouseEvent *event)
@@ -856,6 +909,13 @@ void QtTestCam::mousePressEvent(QMouseEvent *event)
 	}
 
 
+}
+
+
+void QtTestCam::testMouseMoved()
+{
+	//ui.label->setText(QString("坐标：（%1,%2）").arg(QCursor::pos().x()).arg(QCursor::pos().y()));
+	
 }
 
 

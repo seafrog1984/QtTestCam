@@ -106,8 +106,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>199</width>
-                <height>222</height>
+                <width>191</width>
+                <height>201</height>
                </rect>
               </property>
               <attribute name="label">
@@ -176,7 +176,7 @@
        <height>409</height>
       </rect>
      </property>
-     <widget class="QLabel" name="label">
+     <widget class="MyLabel" name="label">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -229,7 +229,7 @@
      <x>0</x>
      <y>0</y>
      <width>1153</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -244,6 +244,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">mylabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="QtTestCam.qrc"/>
  </resources>

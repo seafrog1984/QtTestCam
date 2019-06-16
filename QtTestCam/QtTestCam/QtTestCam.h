@@ -54,7 +54,7 @@ private slots:
 	void OpenCameraClicked();
 	void CloseCameraClicked();
 	void btn_testClicked();
-
+	void testMouseMoved();
 
 private:
 	Ui::QtTestCamClass ui;
@@ -81,7 +81,7 @@ protected:
 
 	void mouseReleaseEvent(QMouseEvent*event);
 	void mousePressEvent(QMouseEvent*event);
-	void mouseMoveEvent(QMouseEvent*event);
+//	void mouseMoveEvent(QMouseEvent*event);
 	void paintEvent(QPaintEvent *event);
 
 	void magicTime();

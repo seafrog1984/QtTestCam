@@ -28,6 +28,7 @@
 #include <QtWidgets/QToolBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <mylabel.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -55,7 +56,7 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
-    QLabel *label;
+    MyLabel *label;
     QWidget *widget_2;
     QGridLayout *gridLayout_2;
     QGridLayout *gridshow;
@@ -132,7 +133,7 @@ public:
         toolBox->setObjectName(QStringLiteral("toolBox"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 199, 222));
+        page_3->setGeometry(QRect(0, 0, 191, 201));
         verticalLayout_4 = new QVBoxLayout(page_3);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -174,7 +175,7 @@ public:
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
         scrollAreaWidgetContents->setGeometry(QRect(0, 0, 469, 409));
-        label = new QLabel(scrollAreaWidgetContents);
+        label = new MyLabel(scrollAreaWidgetContents);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(10, 0, 451, 401));
         scrollArea->setWidget(scrollAreaWidgetContents);
@@ -198,7 +199,7 @@ public:
         QtTestCamClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtTestCamClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1153, 23));
+        menuBar->setGeometry(QRect(0, 0, 1153, 26));
         QtTestCamClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(QtTestCamClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
