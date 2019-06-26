@@ -23,24 +23,24 @@ QT_BEGIN_NAMESPACE
 class Ui_QtLogDlg
 {
 public:
-    QLineEdit *lineEdit;
-    QLineEdit *lineEdit_2;
-    QPushButton *pushButton;
+    QLineEdit *lineEdit_user;
+    QLineEdit *lineEdit_pw;
+    QPushButton *btn_log;
 
     void setupUi(QWidget *QtLogDlg)
     {
         if (QtLogDlg->objectName().isEmpty())
             QtLogDlg->setObjectName(QStringLiteral("QtLogDlg"));
         QtLogDlg->resize(400, 300);
-        lineEdit = new QLineEdit(QtLogDlg);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setGeometry(QRect(130, 30, 113, 20));
-        lineEdit_2 = new QLineEdit(QtLogDlg);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-        lineEdit_2->setGeometry(QRect(130, 80, 113, 20));
-        pushButton = new QPushButton(QtLogDlg);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(150, 140, 75, 23));
+        lineEdit_user = new QLineEdit(QtLogDlg);
+        lineEdit_user->setObjectName(QStringLiteral("lineEdit_user"));
+        lineEdit_user->setGeometry(QRect(130, 30, 113, 20));
+        lineEdit_pw = new QLineEdit(QtLogDlg);
+        lineEdit_pw->setObjectName(QStringLiteral("lineEdit_pw"));
+        lineEdit_pw->setGeometry(QRect(130, 80, 113, 20));
+        btn_log = new QPushButton(QtLogDlg);
+        btn_log->setObjectName(QStringLiteral("btn_log"));
+        btn_log->setGeometry(QRect(150, 140, 75, 23));
 
         retranslateUi(QtLogDlg);
 
@@ -50,7 +50,7 @@ public:
     void retranslateUi(QWidget *QtLogDlg)
     {
         QtLogDlg->setWindowTitle(QApplication::translate("QtLogDlg", "QtLogDlg", 0));
-        pushButton->setText(QApplication::translate("QtLogDlg", "PushButton", 0));
+        btn_log->setText(QApplication::translate("QtLogDlg", "PushButton", 0));
     } // retranslateUi
 
 };

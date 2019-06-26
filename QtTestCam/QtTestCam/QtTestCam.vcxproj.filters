@@ -38,6 +38,27 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="incl">
+      <UniqueIdentifier>{f2e3eb47-69cc-4bb8-82ed-52cc635d7bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{0020d6b1-d9dd-4f17-b7a8-bcb1b8190fcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\log">
+      <UniqueIdentifier>{9294786e-b296-46a1-a688-b4e4bf8cea91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\md5">
+      <UniqueIdentifier>{33128d03-8a91-4a9c-a2e1-15ad9ff9cb72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\pc">
+      <UniqueIdentifier>{a85704b9-a57d-4188-918e-479739c1417c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\socket">
+      <UniqueIdentifier>{42639d1c-f7b0-44ea-a1a8-962989f9249b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\string">
+      <UniqueIdentifier>{f58c3775-847d-4337-8e50-00485beaed3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,6 +105,24 @@
     </ClCompile>
     <ClCompile Include="QtLogDlg.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\log\Logger.cpp">
+      <Filter>utils\log</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\md5\md5.cpp">
+      <Filter>utils\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\string\string_utils.cpp">
+      <Filter>utils\string</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\socket\Socket.cpp">
+      <Filter>utils\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\pc\pc_info.cpp">
+      <Filter>utils\pc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +172,27 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_QtLogDlg.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="incl\client.h">
+      <Filter>incl</Filter>
+    </ClInclude>
+    <ClInclude Include="incl\protocol.h">
+      <Filter>incl</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\log\Logger.h">
+      <Filter>utils\log</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\md5\md5.h">
+      <Filter>utils\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\string\string_utils.h">
+      <Filter>utils\string</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\socket\Socket.h">
+      <Filter>utils\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\pc\pc_info.h">
+      <Filter>utils\pc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
