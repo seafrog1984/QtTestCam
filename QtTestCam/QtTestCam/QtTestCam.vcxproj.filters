@@ -124,6 +124,27 @@
     <ClCompile Include="utils\pc\pc_info.cpp">
       <Filter>utils\pc</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CrossDlg.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CrossDlg.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="CrossDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MyLabel2.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MyLabel2.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLabel2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="checksn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="QtTestCam.h">
@@ -149,6 +170,15 @@
     </CustomBuild>
     <CustomBuild Include="QtLogDlg.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CrossDlg.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CrossDlg.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MyLabel2.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="utils\pc\pc_info.h">
       <Filter>utils\pc</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_CrossDlg.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="checksn.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

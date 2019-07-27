@@ -14,6 +14,7 @@
 #include <qlabel.h>                     //label类
 #include <QTimer>
 #include <QImage>
+#include<QStatusBar>
 
 #include "IRSDK.h"
 #include "QtSetDlg.h"
@@ -43,6 +44,7 @@ class QtTestCam : public QMainWindow
 public:
 	QtTestCam(QWidget *parent = Q_NULLPTR);
 	void closeEvent(QCloseEvent* event);
+	void changeLabel();
 
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);
@@ -56,12 +58,18 @@ private slots:
 	void btn_testClicked();
 	void testMouseMoved();
 
+	void testSingal();
+
+	void time_update(); //时间更新槽函数，状态栏显示时间
+
 private:
 	Ui::QtTestCamClass ui;
+	virtual void resizeEvent(QResizeEvent * event);
 
 	QtSetDlg *dlg;
 	VideoCapture capture;
 	QTimer *timer;
+	QLabel *currentTimeLabel;
 	Mat frame;
 
 	QString ir_ip;
@@ -71,6 +79,7 @@ private:
 	int j;
 	int m_dragging;
 
+	QStatusBar sBar;
 
 public:
 	void changeLabel(int totalNum, int imagePerRow);

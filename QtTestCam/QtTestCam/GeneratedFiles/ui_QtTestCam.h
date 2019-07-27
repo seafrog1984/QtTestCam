@@ -52,7 +52,6 @@ public:
     QWidget *page_3;
     QVBoxLayout *verticalLayout_4;
     QPushButton *btn_play;
-    QPushButton *btn_stop;
     QHBoxLayout *horizontalLayout_3;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
@@ -61,6 +60,7 @@ public:
     QGridLayout *gridLayout_2;
     QGridLayout *gridshow;
     QPushButton *btn_test;
+    QPushButton *btn_stop;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -133,7 +133,7 @@ public:
         toolBox->setObjectName(QStringLiteral("toolBox"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 191, 201));
+        page_3->setGeometry(QRect(0, 0, 199, 222));
         verticalLayout_4 = new QVBoxLayout(page_3);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -143,12 +143,6 @@ public:
         btn_play->setMinimumSize(QSize(50, 50));
 
         verticalLayout_4->addWidget(btn_play);
-
-        btn_stop = new QPushButton(page_3);
-        btn_stop->setObjectName(QStringLiteral("btn_stop"));
-        btn_stop->setMinimumSize(QSize(50, 50));
-
-        verticalLayout_4->addWidget(btn_stop);
 
         toolBox->addItem(page_3, QString::fromUtf8("\350\256\276\345\244\207\346\216\247\345\210\266"));
 
@@ -196,10 +190,14 @@ public:
         btn_test = new QPushButton(centralWidget);
         btn_test->setObjectName(QStringLiteral("btn_test"));
         btn_test->setGeometry(QRect(610, 430, 75, 23));
+        btn_stop = new QPushButton(centralWidget);
+        btn_stop->setObjectName(QStringLiteral("btn_stop"));
+        btn_stop->setGeometry(QRect(560, 460, 181, 50));
+        btn_stop->setMinimumSize(QSize(50, 50));
         QtTestCamClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtTestCamClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1153, 26));
+        menuBar->setGeometry(QRect(0, 0, 1153, 23));
         QtTestCamClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(QtTestCamClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -227,10 +225,13 @@ public:
         btn_connect->setText(QApplication::translate("QtTestCamClass", "\350\277\236\346\216\245", 0));
         groupBox_2->setTitle(QString());
         btn_play->setText(QApplication::translate("QtTestCamClass", "\346\222\255\346\224\276", 0));
-        btn_stop->setText(QApplication::translate("QtTestCamClass", "\345\201\234\346\255\242", 0));
         toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("QtTestCamClass", "\350\256\276\345\244\207\346\216\247\345\210\266", 0));
         label->setText(QApplication::translate("QtTestCamClass", "TextLabel", 0));
+#ifndef QT_NO_STATUSTIP
+        btn_test->setStatusTip(QApplication::translate("QtTestCamClass", "\346\226\255\345\261\202\346\265\213\350\257\225", 0));
+#endif // QT_NO_STATUSTIP
         btn_test->setText(QApplication::translate("QtTestCamClass", "\346\226\255\345\261\202\346\265\213\350\257\225", 0));
+        btn_stop->setText(QApplication::translate("QtTestCamClass", "\345\201\234\346\255\242", 0));
     } // retranslateUi
 
 };
