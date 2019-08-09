@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="QtTestCam">
+    <qresource prefix="/QtTestCam">
+        <file alias="TXCL2">txcl_15.png</file>
+        <file alias="TXCL">txcl_15i.png</file>
     </qresource>
 </RCC>
