@@ -7,6 +7,15 @@
 #include<QLine>
 #include"QMessageBox"
 
+struct MyStruct
+{
+	double ma;
+	double mi;
+	double mean;
+};
+
+Q_DECLARE_METATYPE(MyStruct);
+
 class MyLabel :public QLabel
 {
 	Q_OBJECT
@@ -15,13 +24,17 @@ public:
 	~MyLabel(){}
 
 	void setShapeType(int shapeType);
-//signals:
-//
+
+signals:
+
+	void calData();
+	void calHist();
 //	void clicked(QMouseEvent *ev);  //抬起
 //	void pressed(QMouseEvent *ev);  //按下
 //	void doubled(QMouseEvent *ev);  //双击
 //	void moved(QMouseEvent *ev);    //拖动
 //	//void sig_GetOneFrame(QImage img);
+
 
 protected:
 

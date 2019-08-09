@@ -16,6 +16,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <CvxText.h>
+#include <QDateTime>
 IplImage *img0, *img1;
 Mat temp1;
 
@@ -178,7 +179,7 @@ QtTestCam::QtTestCam(QWidget *parent)
 
 	connect(ui.label, SIGNAL(clicked()), this, SLOT(testMouseMoved()));
 
-	ui.label->setBaseSize(QSize(100, 800));
+//	ui.label->setBaseSize(QSize(100, 800));
 
 	//ui.label->installEventFilter(this);
 
@@ -190,8 +191,8 @@ QtTestCam::QtTestCam(QWidget *parent)
 		for (int y = 0; y < 3; y++)
 		{
 			MyLabel *lb = new MyLabel;
-			lb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			//lb->setFixedSize(240, 320);
+		//	lb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+			lb->setFixedSize(60, 80);
 			lb->setText(QString::number(x * 3 + y+1));
 			lb->setObjectName(QString::number(x * 3 + y ));
 			lb->setFrameShape(QFrame::Box);
@@ -204,6 +205,14 @@ QtTestCam::QtTestCam(QWidget *parent)
 		if (count >= g_picTotalNum) break;
 	}
 
+
+	QGridLayout *topLeftLayout = new QGridLayout;
+	topLeftLayout->addWidget(ui.scrollArea,0,0);
+	topLeftLayout->addLayout(ui.verticalLayout,0,1);
+	topLeftLayout->addWidget(ui.widget_2,0,2);
+
+	ui.centralWidget->setLayout(topLeftLayout);
+	
 	std::string scanID = "test20190521";
 	QDir dir;
 	g_tempFolder = dir.currentPath() + "//Temp//" + QString::fromStdString(scanID);
@@ -217,8 +226,36 @@ QtTestCam::QtTestCam(QWidget *parent)
 
 	}
 
+	//QLabel *msgLable = new QLabel;
+	//msgLable->setMinimumSize(150, 20/*msgLable->sizeHint()*/);
+	//msgLable->setAlignment(Qt::AlignHCenter);
+	//statusBar()->addWidget(msgLable);
+	//statusBar()->showMessage("lin shi xin xi ");//3s后关闭
+
+
+	currentTimeLabel = new QLabel; // 创建QLabel控件
+	//ui.statusBar->addWidget(currentTimeLabel); //在状态栏添加此控件
+	ui.statusBar->addPermanentWidget(currentTimeLabel); //在状态栏添加此控件
+	QTimer *timer = new QTimer(this);
+	timer->start(1000); //每隔1000ms发送timeout的信号
+	connect(timer, SIGNAL(timeout()), this, SLOT(time_update()));
+
+
 
 }
+
+
+void QtTestCam::time_update()
+{
+	//[1] 获取时间
+	QDateTime current_time = QDateTime::currentDateTime();
+	QString timestr = QString::fromLocal8Bit("温度：  湿度： ")+current_time.toString("yyyy-MM-dd hh:mm:ss"); //设置显示的格式
+
+	currentTimeLabel->setText(timestr); //设置label的文本内容为时间
+
+}
+
+
 
 bool QtTestCam::eventFilter(QObject *obj, QEvent *event)
 {
@@ -231,6 +268,14 @@ bool QtTestCam::eventFilter(QObject *obj, QEvent *event)
 
 	char label[1000];
 	char label2[1000];
+
+	if (event->type() == QEvent::MouseMove)
+	{
+
+		QMessageBox::information(NULL, "Title", qobject_cast<QLabel*>(obj)->text());
+	}
+
+
 	if (qobject_cast<QLabel*>(obj) == ui.label&&event->type() == QEvent::MouseMove)
 	{
 		imshow("move", imgt);
@@ -652,10 +697,91 @@ void QtTestCam::changeLabel(int totalNum, int imagePerRow)//调整显示窗口数
 	}
 
 }
+
+void QtTestCam::changeLabel()
+{
+	qDeleteAll(ui.widget_2->findChildren<QLabel*>());
+
+	int g_picTotalNum = 12;
+
+	int rows = (g_picTotalNum - 1) / 3 + 1;
+	/*int hei = ui.widget_2->height() / rows - 10;
+	int wid = hei * 3 / 4;*/
+
+	int count = 0;
+	for (int x = 0; x < (g_picTotalNum - 1) / 3 + 1; x++)
+	{
+		for (int y = 0; y < 3; y++)
+		{
+			MyLabel *lb = new MyLabel;
+			lb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	/*		lb->setFixedSize(wid, hei);*/
+			lb->setText(QString::number(x * 3 + y + 1));
+			lb->setObjectName(QString::number(x * 3 + y));
+			lb->setFrameShape(QFrame::Box);
+			ui.gridshow->addWidget(lb, x, y);
+			lb->setStyleSheet("border-width: 4px;border-style: solid;border-color: rgb(255, 170, 0);");
+			lb->setAlignment(Qt::AlignCenter);
+		//	lb->setMaximumSize(480, 640);
+			//lb->setBaseSize(240, 320);
+			//lb->setMinimumSize(wid, hei);
+			connect(lb, SIGNAL(calData()), this, SLOT(testSingal()));
+			//lb->show();
+			count++;
+			if (count >= g_picTotalNum) break;
+		}
+		if (count >= g_picTotalNum) break;
+	}
+}
+
+void QtTestCam::testSingal()
+{
+	MyLabel *optBtn = qobject_cast<MyLabel *>(sender());
+	QString name = sender()->objectName();//发送信号者的对象名
+
+	QMessageBox::information(this, "size", name );
+
+	/*MyStruct ts = data.value<MyStruct>();
+
+
+	QMessageBox::information(this, "size", QString::number(ts.ma) + "," + QString::number(ts.mi) + "," + QString::number(ts.mean));*/
+
+}
+
+
 void QtTestCam::btn_testClicked()
 {
+//	MyLabel *p = ui.widget_2->findChild<MyLabel *>("0");
+//
+//	QMessageBox::information(this, "size", QString::number(p->width()) + QString::number(p->height()));
+//	
+//	changeLabel();
+//
+////	QRect  rc = ui.gridshow->cellRect(0, 0);
+//
+//
+//
+//	MyLabel *p1 = ui.widget_2->findChild<MyLabel *>("0");
+//
+//	QMessageBox::information(this, "size", QString::number(p1->width()) + QString::number(p1->height()));
 
-	ui.label->setShapeType(2);
+	
+
+	//QString m_msg;
+	//std::vector<string> vecFiles;
+	//QDir *dir = new QDir(g_tempFolder);
+	//QStringList filter;
+	//filter << "*.dat";
+	//dir->setNameFilters(filter);
+	//QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir->entryInfoList(filter));
+
+	//for (int i = 0; i < fileInfo->size(); i++)
+	//{
+	//	vecFiles.push_back(fileInfo->at(i).filePath().toStdString());
+	//}
+
+
+	//ui.label->setShapeType(2);
 
 
 	//QPainter painter(ui.label);
@@ -918,6 +1044,15 @@ void QtTestCam::testMouseMoved()
 	
 }
 
+
+void QtTestCam::resizeEvent(QResizeEvent * event)
+{
+	QWidget::resizeEvent(event);
+
+	//changeLabel();
+
+
+}
 
 
 
